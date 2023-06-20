@@ -8,6 +8,10 @@ import numpy as np
 import pandas as pd
 
 # file directory
+tradeArray1 = np.array([])
+tradeArray2 = np.array([])
+tradeArray3 = np.array([])
+newData = pd.read_csv('/Users/khushnarang/PycharmProjects/FirstWork/DataRecived/Combination12.csv')
 dataAll = pd.read_csv('/Users/khushnarang/Desktop/try/nifty_5minute_data.csv')
 dataAll['date'] = pd.to_datetime(dataAll['date'])
 
@@ -34,9 +38,9 @@ for j in range(0, 54):
     engulfing_pattern = talib.CDLENGULFING(open_price, high_price, low_price, close_price)
 
 
-    hammer_count = len([x for x in hammer_pattern if x == 100])
-    hanging_man_count = len([x for x in hanging_man_pattern if x == -100])
-    bearish_engulfing_pattern = len([x for x in engulfing_pattern  if x == -100])
+    hammer_count += len([x for x in hammer_pattern if x == 100])
+    hanging_man_count += len([x for x in hanging_man_pattern if x == -100])
+    bearish_engulfing_pattern += len([x for x in engulfing_pattern  if x == -100])
 
 
 
@@ -86,13 +90,15 @@ for j in range(0, 54):
     outcomeWithoutPattern = initial_investment + (data['close'][75 * j + 74] - data['open'][75 * j]) * (initial_investment) / data['open'][75 * j]
     outcomeWithPattern = initial_investment + (dummy_investment * initial_investment / data['open'][75 * (j)])
 
-    print("DAY:- ", second_data, end="  ||  ")
-
-
-    print("Current Investment Value by using pattern: $", outcomeWithPattern)
+    tradeArray1 = np.append(tradeArray1, outcomeWithPattern)
+    tradeArray2 = np.append(tradeArray2, outcomeWithoutPattern)
+    tradeArray3 = np.append(tradeArray3, initial_investment)
+    # print("DAY:- ", second_data, end="  ||  ")
+    # print("Current Investment Value by using pattern: $", outcomeWithPattern)
     # print("\nCurrent Investment Value without using pattern: $", outcomeWithoutPattern)
 
-print("Number of Hammer Patterns:", hammer_count)
-print("Number of Hanging Man Patterns:", hanging_man_count)
-print("Number of bearish_engulfing Patterns:", bearish_engulfing_pattern)
+newData['InitialInvestment'] = tradeArray3
+newData['InvestmentUsingPattern'] = tradeArray1
+newData['InvestmentWithoutPattern'] = tradeArray2
+newData.to_csv('/Users/khushnarang/PycharmProjects/FirstWork/DataRecived/Combination12.csv', index=False)
 

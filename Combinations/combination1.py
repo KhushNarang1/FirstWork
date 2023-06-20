@@ -9,6 +9,10 @@ import pandas as pd
 
 # file directory
 answer = 0
+tradeArray1 = np.array([])
+tradeArray2 = np.array([])
+tradeArray3 = np.array([])
+newData = pd.read_csv('/Users/khushnarang/PycharmProjects/FirstWork/DataRecived/Combination1.csv')
 dataAll = pd.read_csv('/Users/khushnarang/Desktop/try/nifty_5minute_data.csv')
 dataAll['date'] = pd.to_datetime(dataAll['date'])
 hammer_count = 0
@@ -91,19 +95,25 @@ for j in range(0, 54):
     outcomeWithoutPattern = initial_investment + (data['close'][75*j + 74] - data['open'][75*j]) * (initial_investment) / data['open'][75*j]
     outcomeWithPattern = initial_investment + (dummy_investment * initial_investment / data['open'][75*(j)])
 
-
-    print("DAY:- ", second_data, end = "  ||  ")
+    # print("DAY:- ", second_data, end = "  ||  ")
     # print( hammer_count, end = " ")
     # print( shooting_star_count, end = " ")
     # print(bullish_engulfing_pattern, end = " ")
     # print(bearish_engulfing_pattern, end = " ")
     # print( outcomeWithPattern, end = " ")
     # print(outcomeWithoutPattern)
-    print("Current Investment Value by using pattern: $", outcomeWithPattern)
+    # print("Current Investment Value by using pattern: $", outcomeWithPattern)
     # print("Current Investment Value without using pattern: $", outcomeWithoutPattern)
+    tradeArray1 = np.append(tradeArray1, outcomeWithPattern)
+    tradeArray2 = np.append(tradeArray2, outcomeWithoutPattern)
+    tradeArray3 = np.append(tradeArray3, initial_investment)
 
-print("\nNumber of Hammer Patterns:", hammer_count)
-print("Number of shooting star Patterns:", shooting_star_count)
-print("Number of bullish_engulfing Patterns:", bullish_engulfing_pattern)
-print("Number of bearish_engulfing Patterns:", bearish_engulfing_pattern)
+# newData['date'] = unique_dates
+# print(type(unique_dates))
+# newData.to_csv('/Users/khushnarang/Desktop/test.csv', index = True)
+newData['InitialInvestment'] = tradeArray3
+newData['InvestmentUsingPattern'] = tradeArray1
+newData['InvestmentWithoutPattern'] = tradeArray2
+newData.to_csv('/Users/khushnarang/Desktop/test.csv', index = False)
+
 

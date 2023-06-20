@@ -8,6 +8,10 @@ import numpy as np
 import pandas as pd
 
 # file directory
+tradeArray1 = np.array([])
+tradeArray2 = np.array([])
+tradeArray3 = np.array([])
+newData = pd.read_csv('/Users/khushnarang/PycharmProjects/FirstWork/DataRecived/Combination2.csv')
 dataAll = pd.read_csv('/Users/khushnarang/Desktop/try/nifty_5minute_data.csv')
 dataAll['date'] = pd.to_datetime(dataAll['date'])
 
@@ -88,15 +92,17 @@ for j in range(0, 54):
         dummy_investment += recent_buy
     outcomeWithoutPattern = initial_investment + (data['close'][75 * j + 74] - data['open'][75 * j]) * (initial_investment) / data['open'][75 * j]
     outcomeWithPattern = initial_investment + (dummy_investment * initial_investment / data['open'][75 * (j)])
-
-    print("DAY:- ", second_data, end="  ||  ")
-    print("Current Investment Value by using pattern: $", outcomeWithPattern)
+    tradeArray1 = np.append(tradeArray1, outcomeWithPattern)
+    tradeArray2 = np.append(tradeArray2, outcomeWithoutPattern)
+    tradeArray3 = np.append(tradeArray3, initial_investment)
+    # print("DAY:- ", second_data, end="  ||  ")
+    # print("Current Investment Value by using pattern: $", outcomeWithPattern)
     # print("\nCurrent Investment Value without using pattern: $", outcomeWithoutPattern)
 
-print("\nNumber of Hammer Patterns:", hammer_count)
-print("Number of Hanging Man Patterns:", hanging_man_count)
-print("Number of bullish_engulfing Patterns:", bullish_engulfing_pattern)
-print("Number of bearish_engulfing Patterns:", bearish_engulfing_pattern)
 
+newData['InitialInvestment'] = tradeArray3
+newData['InvestmentUsingPattern'] = tradeArray1
+newData['InvestmentWithoutPattern'] = tradeArray2
+newData.to_csv('/Users/khushnarang/PycharmProjects/FirstWork/DataRecived/Combination2.csv', index = False)
 
 
